@@ -1,0 +1,70 @@
+{% extends "pages/base.html" %}
+{% block extrastyle %}
+
+    <link rel="stylesheet" href="/static/css/style_post.css" type="text/css">
+    <meta property="og:url"             content="https://127.0.0.1:8000/blog/{{post.id}}" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content= {{post.title}} />
+    <meta property="og:description"   content= {{post.title}}/>
+    <meta property="og:image"         content={{post.image.url}} />
+
+
+{% endblock %}
+{% block title %}{{post.title}}{% endblock %}
+ 
+{% block content %}
+<body id="PostDetail">
+    <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" 
+            src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v11.0" 
+            nonce="K1eYxXUP">
+        </script>
+        <script async defer crossorigin="anonymous" 
+            src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v11.0" 
+            nonce="CPjKqXM3">
+        </script>
+
+    <h3 > {{post.title}}</h3>
+    <center> <img src="{{post.image.url}}" width="px" height="300px" /> </center>
+    <h6>on {{post.date}}</h6>
+    </br>
+    </br>
+    {{post.content|safe|linebreaks}}
+    
+
+    <div class="my-3 fb-share-button" 
+        data-href="https://127.0.0.1:8000/blog/{{post.id}}" 
+        data-layout="button_count" 
+        data-size="large">
+        <a target="_blank" 
+            href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8000%2Fblog%2Fblogpost%2F4&src=sdkpreparse" 
+            class="fb-xfbml-parse-ignore">Share
+        </a>
+    </div>
+    {% comment %} <div class="fb-comments" 
+        data-href="https://127.0.0.1:8000/blog/{{post.id}}" 
+        data-width="" 
+        data-numposts="1">
+    </div>
+    <span class="fb-comments-count" data-href="https://127.0.0.1:8000/blog/{{post.id}}"></span> {% endcomment %}
+    
+    </br>
+    <hr>
+    </br>
+    {% for comment in post.comments.all %}
+        <h4><strong>{{comment.author}}</strong></h4>
+        <h6><p>{{comment.date}}</p></h6>
+        <p>{{comment.body|linebreaks}}</p>
+    {% endfor %}
+
+    {% if user.username %}
+        <form action="{% url 'post' post.id %}" method="POST">
+            {% csrf_token %}
+            <p><label>Bình luận:</label></p>
+            {{form.body}}
+            <br/>
+            <input type="submit" value="Bình luận"/>
+        </form>
+    {% endif %}
+</body>
+{% endblock %}

@@ -1,0 +1,261 @@
+{% extends "pages/base.html" %}
+{% block extrastyle%}
+
+    
+    <link rel="stylesheet" href="/static/css/style_main_page.css" type="text/css">
+
+{% endblock%}
+{% block title %}Lề Bóng Đá{% endblock %}
+ 
+
+{% block content %}
+    
+<div class="row">
+    <div class ="col-sm-8 ">
+        {% for post in Posts %}
+        <table  class ="tab_main">
+            
+            {% if post == Posts.first %}
+            <tr>
+                <td >
+                    <img src="{{post.image.url}}" width="400px" height=auto />
+                </td>
+                <td style="background-color:#c5c0c0; box-shadow: 0px 0px 1px 0px; border:none; padding:10px;">
+                    <h4> <a href= " {% url 'post' post.id %}">{{post.title}}</a></h4>
+                    <p> {{post.date|date:"d-m-Y"}}</p>
+                </td>
+            </tr>
+            <br>
+            {% else %}
+            
+            <script type="text/javascript">
+                        var tr = document.getElementById('tr_main');
+                        sort_Col();
+                        function sort_Col(){
+                                tr.insertCell(0);
+                                tr.cells[0].innerHTML += " <td style='padding: 5px;'> <h6> <a href= \"{% url 'post' post.id %}\"> {{post.title}}</a></h6>  <em>{{post.date|date:"d-m-Y"}} </em> </td>" ;   
+                        }
+            </script>
+            <tr id ="tr_main"></tr>
+            
+            {% endif%}
+            
+        </table>
+        {% endfor %}
+    </div>
+     <div class="col-sm-4">
+        <aside class="blog-sidebar">
+                <div class="p-4 mb-3 bg-light rounded">
+                    <h4 class="font-italic">Tin hot chuyển nhượng</h4>
+                    {% for post in Posts %}
+                        <table  class ="tab_list">
+                        <hr>
+                        <tr>
+                            <td >
+                                <img src="{{post.image.url}}" width="50px" height=auto />
+                            </td>
+                            <td  class ="td_text_list" style=" border:none; padding:5px; width=100% ">
+                                <p> <a href= " {% url 'post' post.id %}">{{post.title}}</a></p>
+                                <em> {{post.date|date:"d-m-Y"}}</em>
+                            </td>
+                        </tr>
+                        </table>
+                    {% endfor %}
+                </div>
+        </aside>  
+        
+    </div>  
+    
+</div>
+
+<div class="row">
+    <div class="col-sm-8">
+        {% for post in Posts %}
+            <table  class ="tab_list">
+            <hr>
+            <tr>
+                <td >
+                    <img src="{{post.image.url}}" width="150px" height=auto />
+                </td>
+                <td  class ="td_text_list" style=" box-shadow: 0px 0px 1px 0px; border:none; padding:10px; width=100% ">
+                    <h4> <a href= " {% url 'post' post.id %}">{{post.title}}</a></h4>
+                    <em> {{post.date|date:"d-m-Y"}}</em>
+                </td>
+            </tr>
+        
+            
+            </table>
+        {% endfor %}
+    </div>
+    
+
+</div>
+
+<hr>
+<section class="about-section">
+    <div class="row">
+        <h2>About Us</h2>
+        <p class="p-long">
+       
+        </p>
+    </div>
+    <div class="row">
+          <div class="col span-1-of-4 about-picture">
+              <img src="/static/images/logo.png" alt="activities1">
+              <p class="picture-title">
+                  Barca "có thể" không giữ chân được Messi
+              </p>
+          </div>
+          <div class="col span-1-of-4 about-picture">
+              <img src="/media/images/logo.png" alt="activities2">
+              <p class="picture-title">
+                  Italia tiến vào chung kết sau loạt luân lưu với Tây Ban Nha
+              </p>
+          </div>
+          <div class="col span-1-of-4 about-picture">
+              <img src="/media/images/logo.png" alt="activities3">
+              <p class="picture-title">
+                 Be confident
+              </p>
+          </div>
+          <div class="col span-1-of-4 about-picture">
+              <img src="/static/images/logo.png" alt="activities4">
+              <p class="picture-title">
+                All our friends
+              </p>
+          </div>
+    </div>
+</section>
+<section class="products-section">
+    <h2>Tin nổi bật</h2>
+
+    <div class="row">
+
+        <div class="col span-1-of-3">
+            <div class="product-box">
+                <h3>Pronunciation class</h3>
+                <p class="product-price">19$ <span>/ month</span></p>
+                <ul>
+                    <li><i class="fas fa-check small-icon"></i>Native voices</li>
+                    <li><i class="fas fa-check small-icon"></i>Master IPA</li>
+                </ul>
+                
+            </div>
+        </div>
+
+        <div class="col span-1-of-3">
+            <div class="product-box">
+                <h3>Speaking class</h3>
+                <p class="product-price">25$ <span>/ month</span></p>
+                <ul>
+                    <li><i class="fas fa-check small-icon"></i>Native speaking</li>
+                    <li><i class="fas fa-check small-icon"></i>Speaking naturally</li>
+                </ul>
+                
+            </div>
+        </div>
+
+        <div class="col span-1-of-3">
+            <div class="product-box">
+                <h3>Listening class</h3>
+                <p class="product-price">25$ <span>/ month</span></p>
+                <ul>
+                    <li><i class="fas fa-check small-icon"></i>Native speech</li>
+                    <li><i class="fas fa-check small-icon"></i>Hearing English clearly</li>
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials-section">
+    <h2>Testimonials</h2>
+    <div class="row">
+        <div class="col span-1-of-3">
+            <blockquote>
+                    The course is very helpful, I can speak English fluently and I think The SF English became my second family, I love everyone very much. Thank you!
+                <cite>
+                    <img  src="/media/images/logo.png" alt="person1"> Nguyen Chem Gio
+                </cite>
+            </blockquote>
+        </div>
+        <div class="col span-1-of-3">
+            <blockquote>
+                    I believe that who came to This English centre would love this place as I did, when the course finished, I feel sad because studying in that place I always felt funny. 
+                <cite>
+                    <img src="/media/images/logo.png" alt="person1"> Tran Vo Van
+                </cite>
+            </blockquote>
+        </div>
+        <div class="col span-1-of-3">
+            <blockquote>
+                    Trust me, you can master English just by joining this class, I did, so I believe that you can too. Hope that one day, you can come and join in this class.
+                <cite>
+                    <img src="/media/images/logo.png" alt="person1">Le Du Do
+                </cite>
+            </blockquote>
+        </div>
+    </div>
+</section>
+<section class="sponsors-section">
+    <h2>Các câu lạc bộ</h2>
+    <div class="row">
+        <ul class="sponsors-showcase clearfix">
+            <li>
+                <figure>
+                    <img class="logo-sponsor" src="/media/images/logo.png" alt="barcelona">
+                    <figcaption>
+                          Barcelona
+                    </figcaption>
+                </figure>
+            </li>
+            <li>
+                <figure>
+                    <img class="logo-sponsor" src="/media/images/logo.png" alt="manchester city">
+                    <figcaption>
+                          Manchester City
+                    </figcaption>
+                </figure>
+            </li>
+            <li>
+                <figure>
+                    <img class="logo-sponsor" src="/media/images/logo.png" alt="tottenham hotspur">
+                    <figcaption>
+                          Tottenham Hotspur
+                    </figcaption>
+                </figure>
+            </li>
+        </ul>
+        <ul class="sponsors-showcase clearfix">
+            <li>
+                <figure>
+                    <img class="logo-sponsor"src="/media/images/logo.png" alt="real marid">
+                    <figcaption>
+                          Real Marid
+                    </figcaption>
+                </figure>
+            </li>
+            <li>
+                <figure>
+                    <img class="logo-sponsor" src="/media/images/logo.png" alt="Juventus">
+                    <figcaption>
+                          Juventus
+                    </figcaption>
+                </figure>
+            </li>
+            <li>
+                <figure>
+                    <img  class="logo-sponsor" src="/media/images/logo.png" alt="manchester united">
+                    <figcaption>
+                          Manchester United
+                    </figcaption>
+                </figure>
+            </li>
+        </ul>
+    </div>
+</section>
+
+
+
+{% endblock %}

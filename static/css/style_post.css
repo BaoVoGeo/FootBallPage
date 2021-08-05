@@ -1,0 +1,15 @@
+
+
+#PostDetail h3{
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  padding-top: 30px;
+  padding-bottom: 10px;
+  text-align: center;
+  
+  color: rgb(177, 32, 32);
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  margin-bottom: 15px;
+}
