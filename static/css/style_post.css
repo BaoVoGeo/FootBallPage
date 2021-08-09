@@ -13,3 +13,24 @@
   border-top-left-radius: 15px;
   margin-bottom: 15px;
 }
+
+.form-com {
+  background-color: #fff;
+  padding: 0px;
+  margin: 0px;
+  text-align: left;
+  float: left;
+  border: none;
+  
+}
+
+.form-com form.body{
+  background-color: #fff;
+  border: none;
+}
+.form-com input {
+  float: left;
+  background-color: #fff;
+  border: none;
+
+}

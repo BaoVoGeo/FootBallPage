@@ -1,5 +1,6 @@
 # FootBallPage
 GeoComply
+<<<<<<< HEAD
 
 README.md 
 
@@ -53,3 +54,5 @@ Django-alert :
 	pip install django-alert
 
 	
+=======
+>>>>>>> HRE_65639556_share_and_extensions_fb

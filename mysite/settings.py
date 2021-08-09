@@ -57,8 +57,7 @@ INSTALLED_APPS = [
     'sslserver',
     'social_django',
     'file_uploader'
-    
-    
+
 ]
 
 MIDDLEWARE = [

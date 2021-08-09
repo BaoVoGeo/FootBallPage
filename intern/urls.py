@@ -15,4 +15,7 @@ urlpatterns = [
     url('profile/change_info', views.fileUploaderView, name='fileUpLoaderView'),
     
     path('accounts/', include('accounts.urls'), name = 'accounts'),
+
+    path('submit_review/', views.submit_review, name='submit_review'),
+
 ]

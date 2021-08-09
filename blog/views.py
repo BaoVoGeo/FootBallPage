@@ -1,4 +1,5 @@
-from django.shortcuts import render
+
+
 from django.shortcuts import render, get_object_or_404
 from .models import Post, Comment
 from .cmtforms import CommentForm
@@ -16,11 +17,16 @@ class PostListView(ListView):
 def post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     form = CommentForm()
+
     if request.method == "POST":
         form = CommentForm(request.POST, author=request.user, post=post)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(request.path)
+
+    else:
+        form = CommentForm()
+
     return render(request, "blog/post.html", {"post": post, "form": form})
 
 def accounts(request):

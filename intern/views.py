@@ -1,11 +1,15 @@
 from django.shortcuts import render
 
 # Create your views here.
+from django.shortcuts import redirect, render
+from intern.models import ReviewRating
 from django.http import HttpResponse
+from django.contrib import messages
 from intern.formsignup import RegistrationForm
 from django.http import HttpResponseRedirect 
 from django.contrib.auth.models import User
-from .forms import UploadFileForm
+from .forms import UploadFileForm, ReviewForm
+
 from django.contrib.auth.decorators import login_required
 @login_required
 
@@ -39,9 +43,6 @@ def fileUploaderView(request):
                 p.img_avt_id = 2
                 p.save()
                 
-           
-            # if migrations.RunSQL(sql):
-            #     return HttpResponse("<h2>File uploaded successful!</h2>")
         else:
             return HttpResponse("<h2>File uploaded not successful!</h2>")
     
@@ -52,3 +53,31 @@ def upload(f):
     file = open(f.name, 'wb+') 
     for chunk in f.chunks():
         file.write(chunk)
+        
+        
+def submit_review(request):
+    # url = request.META.get('HTTP_REFERER')
+    
+    if request.method == "POST":
+        print("vo duoc ne")
+        try:
+            print("vo try nè")
+            review = ReviewRating.objects.get(id=request.user.id,)
+            form = ReviewForm(request.POST, instance=review)
+            form.save()
+            messages.success(request, "Thank you! Your review has been updated.")
+            return redirect('/')
+        except Exception:
+            print("vo except nè")
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                data = ReviewRating()
+                data.subject = form.cleaned_data['subject']
+                data.rating = form.cleaned_data['rating']
+                data.review = form.cleaned_data['review']
+                data.ip = request.META.get('REMOTE_ADDR')
+                data.user_id = request.user.id
+                data.save()
+                messages.success(request, "Thank you! Your review has been submitted.")
+                return redirect('/')
+
