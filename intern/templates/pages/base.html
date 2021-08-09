@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   {% load static %}
+   
+    <link rel="stylesheet" href= "/static/css/bootstrap.min.css"  type="text/css">
+    <link rel="stylesheet" href= "/static/css/bootstrap.css"  type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+
+
+
+    {% block extrastyle %}{% endblock %}
+   {% comment %} <link rel="stylesheet" href="../vendors/fonts/webfonts" type="text/css" > {% endcomment %}
+   <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+   <br>
+
+   <div class="container-fluid" style="min-height: 90%">
+       
+        <div class="row " style="margin-top: -10px;">
+            <div class="col-sm-2">
+
+            </div>
+            <div class="col-sm-8">
+                <center>
+                <img src="{% static 'images/logo.png' %}" class="responsive-img" style="max-height:150px" width="60px" height="60px" alt ="Logo Lề Bóng Đá"/>
+                
+                </center>
+            </div>
+            <div class="col-sm-1">
+            </div>  
+            <div class="col-sm-1 ">
+                    
+                    {% if user.first_name%}
+                    <h5 style = " word-wrap: break-word;">Xin chào </h5>
+                        <p>
+                       <a href="{% url 'profile' %}" style="color: #27ae60">{{user.first_name}} {{user.last_name}}</a> 
+                        </p>
+                        <p ><a href="{% url 'logout' %}" style ="color:gray">Đăng xuất</a></p>
+                    {% else %}
+                    <p>
+                    <a href="accounts" style ="color:black">Đăng nhập</a></p>
+                    {% endif %}
+
+                    
+                
+            </div>
+        </div>
+
+
+        <div class="row" style ="margin-top:0px;">
+            <div class="col-sm-2"></div>
+        
+            <div class="col-sm-8">
+                
+                <ul id="menu">
+                    <li>
+                        <a href="/blog">
+                        Trang chủ 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                        Giải Châu Âu
+                        <span class="arrow arrow-down"></span>
+                        </a>
+                        <ul class="dropdown_menu">
+                            <li>
+                                <a href="javascript:void(0)">Anh</a>
+                            </li>
+                        
+                            <li>
+                                <a href="javascript:void(0)">Pháp</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">Tây Ban Nha</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">Ý</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">Đức</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">Các giải khác </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                        Chuyển nhượng
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                        Tin nóng
+                        </a>
+                        
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                        Việt Nam
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                        Video
+                        </a>
+                    </li>
+                </ul>
+                
+            </div>
+            <div class="col-sm-2"></div>
+            
+
+        </div>
+        
+        </br>
+        <div class="row"  >
+            <div class="col-sm-2">
+                
+            </div>
+        
+            <div class="col-sm-8">
+                {% block content %}
+            
+                {% endblock %}
+            </div>
+            <div class="col-sm-2">
+                
+            </div>
+        </div>
+
+    </div>
+    <hr>
+<footer  >
+    
+    <div class="row">
+        <div class="col-sm-6">
+            <header class="section-heading">
+                    <h3>Customer Reviews</h3>
+            </header>
+                {% for review in reviews %}
+                <article class="box mb-3">
+                    <div class="icontext w-100">
+                        <div class="text">
+                            <span class="date text-muted float-md-right">{{ review.updated_at }}</span>
+                            <h6 class="mb-1">{{ review.user.first_name }}{{ review.user.last_name }}</h6>
+                            <div class="rating-star">
+                                <span>
+                                    <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- icontext.// -->
+                    <div class="mt-3">
+                        <h6>{{ review.subject }}</h6>
+                        <p>{{ review.review }}</p>
+                    </div>
+                </article>
+                {% endfor %}
+        </div>
+        <div class="col-sm-6" style="width:60%">
+                <form action="{% url 'submit_review' %}" method="POST">
+                    {% csrf_token %}
+                    <h5> Nhận xét</h5>
+                    <div>
+                        {% include "pages/alerts.html" %}
+                        <label>Bạn thấy Lề Bóng Đá như thế nào?</label>
+                        <br>
+                        <div class="rate">
+							<input type="radio" name="rating" id="rating10" value="5" required /><label for="rating10" title="5"></label>
+							<input type="radio" name="rating" id="rating9" value="4.5" required /><label for="rating9" title="4.5" class="half"></label>
+							<input type="radio" name="rating" id="rating8" value="4" required /><label for="rating8" title="4"></label>
+							<input type="radio" name="rating" id="rating7" value="3.5" required /><label for="rating7" title="3.5" class="half"></label>
+							<input type="radio" name="rating" id="rating6" value="3" required /><label for="rating6" title="3"></label>
+							<input type="radio" name="rating" id="rating5" value="2.5" required /><label for="rating5" title="2.5" class="half"></label>
+							<input type="radio" name="rating" id="rating4" value="2" required /><label for="rating4" title="2"></label>
+							<input type="radio" name="rating" id="rating3" value="1.5" required /><label for="rating3" title="1.5" class="half"></label>
+							<input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="1"></label>
+							<input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half"></label>
+						</div>
+                        <br>
+                        Tiêu đề:
+                        <input type="text" class="form-control" name="subject">
+                        <br>
+                        Lời nhận xét:
+                        <textarea name="review" rows="4" class="form-control"></textarea>
+                        <br>
+                        
+                        {% if user.is_authenticated %}
+                            
+                            <input type="submit" value="Submit Review" class="btn btn-primary">
+    
+                        {% else %}
+                        <p>Bạn cần đăng nhập để nhận xét. <span><a href="{% url 'accounts' %}">Đăng nhập ngay</a></span></p>
+                        {% endif %}
+                    </div>
+                </form>
+                <br>
+                
+        
+        </div>
+        
+    </div>
+    
+
+
+    <div class="container-fluid" style = "height : 150px" >
+    <br>
+    <center>
+        <h5> Cảm ơn các bạn đã ghé thăm website của Lề Bóng Đá </h5> 
+        
+        <h6> Liên hệ với chúng tôi tại Facebook/ Instagram</h6>
+        <a href="https://www.facebook.com/search/top?q=l%E1%BB%81%20b%C3%B3ng%20%C4%91%C3%A1" >
+        <img src = "{% static 'images/fb_logo.png' %}" class="responsive-img"  style="max-height:40px" width="30px" height="30px"> 
+        </img> </a>
+        &nbsp;
+        &nbsp;
+        <a href="https://www.instagram.com/lebongda/"> 
+        <img src = "{% static 'images/ig_logo.png' %}" class="responsive-img" style="max-height:40px" width="30px" height="30px">
+        </img> </a>
+        </br>
+        <p>
+        Copyright &copy; 2021 BaoVo
+        </p>
+    </center>
+    </div>
+    
+    
+</footer>
+</body>
+</html>
