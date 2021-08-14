@@ -52,18 +52,7 @@
         <em class=" text-muted font-weight-normal">{{comment.date}}</em>
         <p>{{comment.body|linebreaks}}</p>
     {% endfor %}
-
-    {% if user.username %}
-        <form action="{% url 'post' post.id %}" method="POST">
-            {% csrf_token %}
-            <p><label>Bình luận:</label></p>
-            {{form.body}}
-            <br/>
-            <input type="submit" value="Bình luận"/>
-        </form>
-    {% endif %}
         
-
     <div class ="row">
         <div class="col-sm-8">
             {% if user.first_name %}

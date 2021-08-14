@@ -22,7 +22,7 @@
 </head>
 <body>
    <br>
-
+    
    <div class="container-fluid" style="min-height: 90%">
        
         <div class="row " style="margin-top: -10px;">
@@ -34,6 +34,7 @@
                 <img src="{% static 'images/logo.png' %}" class="responsive-img" style="max-height:150px" width="60px" height="60px" alt ="Logo Lề Bóng Đá"/>
                 
                 </center>
+                
             </div>
             <div class="col-sm-1">
             </div>  
@@ -55,7 +56,30 @@
             </div>
         </div>
 
+        <div class="row " style="margin-top: -10px;">
+            <div class="col-sm-5">
 
+            </div>
+            <div class="col-sm-8" style="margin-top: -10px; margin-bottom: -30px;">
+                
+                <div>
+                    <form action="{% url 'search' %}" class="search" method="GET" style="background-color: #fff;padding:0px; border: none">
+                        <div class="input-group w-100">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm" name="q" value="{{ q }}">
+                            <div >
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> <!-- search-form// -->
+                </div>
+                
+            </div>
+            <div class="col-sm-2">
+            </div>  
+            
+        </div>
         <div class="row" style ="margin-top:0px;">
             <div class="col-sm-2"></div>
         
@@ -141,7 +165,7 @@
 
     </div>
     <hr>
-<footer  >
+<footer>
 
     <section class="contact-section">
     
@@ -151,7 +175,7 @@
             <header class="section-heading">
                     <h3>Customer Reviews</h3>
             </header>
-                {% for review in reviews %}
+                {% for review in Reviews %}
                 <article class="box mb-3">
                     <div class="icontext w-100">
                         <div class="text">
@@ -176,10 +200,9 @@
                 </article>
                 {% endfor %}
         </div>
-        <div class="col-sm-6" style="width:60%">
+        <div class="col-sm-6" style="padding:20px">
                 <form action="{% url 'submit_review' %}" method="POST">
                     {% csrf_token %}
-                    <h5> Nhận xét</h5>
                     <div>
                         {% include "pages/alerts.html" %}
                         <label>Bạn thấy Lề Bóng Đá như thế nào?</label>
@@ -196,12 +219,16 @@
 							<input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="1"></label>
 							<input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half"></label>
 						</div>
+
+                        <label for="subject">Chọn chủ đề</label>
+                        <select name="subject" id="subject" class="form-control">
+                            <option value="volvo">Giao diện</option>
+                            <option value="saab">Tính năng</option>
+                            <option value="opel">Thông tin</option>
+                        </select>
                         <br>
-                        Tiêu đề:
-                        <input type="text" class="form-control" name="subject">
-                        <br>
-                        Lời nhận xét:
-                        <textarea name="review" rows="4" class="form-control"></textarea>
+                        
+                        <textarea name="review" rows="4" cols ="10" class="form-control" style=" float:center; left:20px" placeholder="Gửi những lời yêu thương..."></textarea>
                         <br>
                         
                         {% if user.is_authenticated %}
@@ -217,7 +244,8 @@
                 
         
         </div>
-        
+        <div class="col-sm-1">
+        </div>
     </div>
     
 
@@ -237,13 +265,10 @@
         <img src = "{% static 'images/ig_logo.png' %}" class="responsive-img" style="max-height:40px" width="30px" height="30px">
         </img> </a>
         </br>
-
-    </center>
-    </div>
-    <div class="col-sm-8">
-    <p>
-        Copyright &copy; 2021 BaoVo
-    </p>
+        </br>
+        <p>
+            Copyright &copy; 2021 BaoVo
+        </p>
     </center>
     </div>
     

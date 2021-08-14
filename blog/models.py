@@ -1,19 +1,62 @@
 from django.db import models
 from django.conf import settings
+from django.db.models.constraints import UniqueConstraint
 from accounts.models import Account
+import datetime
+from django.template.defaultfilters import slugify
+from django.urls import reverse
 
+class Category(models.Model):
+    name = models.CharField(max_length = 50)
+    slug = models.SlugField(unique=True,blank=True,null=True)
+    
+    def save(self, *args, **kwargs):
+         if not self.id:
+                # Newly created object, so set slug
+            self.slug = slugify(self.name)
+            super(Category, self).save(*args, **kwargs)
 class Post(models.Model):
     title = models.CharField(max_length=100)
+    slug  = models.SlugField(null=True,blank=True, unique=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField()
     author = models.CharField(max_length= 10)
     image = models.ImageField(null=True)
     date = models.DateTimeField(auto_now_add=True)
+    post_views=models.IntegerField(default=0)
+    
+    def title_slug  (self):
+        return slugify(self.title)
+    def save(self, *args, **kwargs):
+         if not self.id:
+                # Newly created object, so set slug
+            self.slug = slugify(self.title)
+            super(Post, self).save(*args, **kwargs)
+    def get_url(self):
+        return reverse('post', args=[self.category.slug, self.slug])        
+
+class PostInteract(models.Model):
+    post_id = models.ForeignKey(Post,on_delete=models.CASCADE)
+    likes = models.IntegerField(default = 0)
+    dislikes = models.IntegerField(default = 0)
+    shares  = models.IntegerField(default = 0)
+    views=models.IntegerField(default=0)
     def __str__(self):
         
-        return self.title
+        return self.post_id
+
+class PostViewsCount(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,db_index=False)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, db_index=False)
+    ip = models.GenericIPAddressField(default=None, blank=True, null=True,db_index=False)
+    date_view = models.DateField(("Date"), default=datetime.date.today)
+    
+    class Meta:
+        unique_together = (['post','ip','date_view'],['post','user','date_view'])
+    
+    
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-
     author = models.ForeignKey(Account, on_delete=models.CASCADE)
     body = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
@@ -34,8 +77,6 @@ class Like(models.Model):
 
     def __str__(self):
         return str(self.comment.comment)[:30]
-
-
 
 class DisLike(models.Model):
     ''' Dislike  comment '''
