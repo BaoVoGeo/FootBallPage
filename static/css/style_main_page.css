@@ -1,0 +1,33 @@
+.tab_main {
+ color: rgb(97, 95, 95);
+ 
+}
+.tab_main > tr{
+    max-height: 200px;
+}
+.tab_main .td_main_list{
+    width: 300px;
+}
+
+
+#tr_main td{
+    width:250px;
+    border :None; 
+    background-color: rgb(233, 224, 224);
+
+}
+
+.tab_list {
+    color: rgb(95, 94, 94);
+}
+.tab_list tr{
+       max-height: 200px;
+       width:100%;
+}
+.tab_list .td_text_list{
+    width: 100%;
+    border: 0px;
+}
+
+   
+  
