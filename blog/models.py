@@ -27,6 +27,7 @@ class Post(models.Model):
     
     def title_slug  (self):
         return slugify(self.title)
+    
     def save(self, *args, **kwargs):
          if not self.id:
                 # Newly created object, so set slug
