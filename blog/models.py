@@ -23,7 +23,7 @@ class Post(models.Model):
     author = models.CharField(max_length= 10)
     image = models.ImageField(null=True)
     date = models.DateTimeField(auto_now_add=True)
-    post_views=models.IntegerField(default=0)
+    post_views=models.IntegerField(default = 0)
     
     def title_slug  (self):
         return slugify(self.title)
