@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-from .models import Post,Comment
-
 from .models import *
 
 
@@ -15,7 +13,7 @@ class CommentInline(admin.TabularInline):
     model = Comment
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'date']
+    list_display = ['title','author', 'date']
     list_filter = ['date']
     search_fields = ['title','author']
     inlines = [CommentInline]
@@ -32,7 +30,13 @@ class CommentAdmin(admin.ModelAdmin):
     # inlines = [LikeInline]
     # def approve_comments(self, request, queryset):
     #     queryset.update(active=True)
-        
+
+class PostInteractAdmin(admin.ModelAdmin):
+    list_display = ['post','views']
+    list_filter = ['views']
+    search_fields = ['post']
+    
+admin.site.register(PostInteract, PostInteractAdmin)
 admin.site.register(Category, CategoryAdmin)    
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)

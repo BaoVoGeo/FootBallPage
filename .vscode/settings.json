@@ -1,0 +1,73 @@
+{
+    "workbench.colorCustomizations": {
+
+
+        "terminal.background":"#282936",
+        "terminal.foreground":"#E9E9F4",
+        "terminalCursor.background":"#E9E9F4",
+        "terminalCursor.foreground":"#E9E9F4",
+        "terminal.ansiBlack":"#282936",
+        "terminal.ansiBlue":"#62D6E8",
+        "terminal.ansiBrightBlack":"#626483",
+        "terminal.ansiBrightBlue":"#62D6E8",
+        "terminal.ansiBrightCyan":"#A1EFE4",
+        "terminal.ansiBrightGreen":"#EBFF87",
+        "terminal.ansiBrightMagenta":"#B45BCF",
+        "terminal.ansiBrightRed":"#EA51B2",
+        "terminal.ansiBrightWhite":"#F7F7FB",
+        "terminal.ansiBrightYellow":"#00F769",
+        "terminal.ansiCyan":"#A1EFE4",
+        "terminal.ansiGreen":"#EBFF87",
+        "terminal.ansiMagenta":"#B45BCF",
+        "terminal.ansiRed":"#EA51B2",
+        "terminal.ansiWhite":"#E9E9F4",
+        "terminal.ansiYellow":"#00F769"
+    },
+    
+    "synthwave84.brightness": 0.45,
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+          {
+            "name": "italic font",
+            "scope": [
+              "comment",
+              "keyword",
+              "storage",
+              "keyword.control",
+              "keyword.control.from",
+              "keyword.control.flow",
+              "keyword.operator.new",
+              "keyword.control.import",
+              "keyword.control.export",
+              "keyword.control.default",
+              "keyword.control.trycatch",
+              "keyword.control.conditional",
+              "storage.type",
+              "storage.type.class",
+              "storage.modifier.tsx",
+              "storage.type.function",
+              "storage.modifier.async",
+              "variable.language",
+              "variable.language.this",
+              "variable.language.super",
+              "meta.class",
+              "meta.var.expr",
+              "constant.language.null",
+              "support.type.primitive",
+              "entity.name.method.js",
+              "entity.other.attribute-name",
+              "punctuation.definition.comment",
+              "text.html.basic entity.other.attribute-name",
+              "tag.decorator.js entity.name.tag.js",
+              "tag.decorator.js punctuation.definition.tag.js",
+              "source.js constant.other.object.key.js string.unquoted.label.js",
+            ],
+            "settings": {
+              "fontStyle": "italic",
+            }
+          },
+        ]
+      }
+
+    
+}
