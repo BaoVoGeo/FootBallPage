@@ -471,7 +471,7 @@ input, textarea{
   padding: 10px;
   background-color: rgba(48, 47, 47, 0.3);
   border: 1px solid rgba(70, 68, 68, 0.7);
-  margin-left: 30px;
+  
   cursor: pointer;
   border-radius: 5px;
 }
@@ -493,7 +493,7 @@ input[type=text], input[type=email], textarea{
 
 input[type=text]:focus, input[type=email]:focus, textarea:focus{
   color: white;
-  background-color: rgba(48, 47, 47, 0.8)
+  background-color: rgba(199, 156, 156, 0.8)
 }
 
 form .row:last-child{

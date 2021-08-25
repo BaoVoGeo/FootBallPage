@@ -2,10 +2,11 @@
 {% block extrastyle%}
 
     
+    <link rel="stylesheet" href="/static/css/style_blog.css" type="text/css">
     <link rel="stylesheet" href="/static/css/style_main_page.css" type="text/css">
 
 {% endblock%}
-{% block title %}La Liga{% endblock %}
+{% block title %}  {{ title_page}} {% endblock %}
  
 
 {% block content %}
@@ -78,6 +79,7 @@
                     <img src="{{post.image.url}}" width="150px" height=auto />
                 </td>
                 <td  class ="td_text_list" style=" border:none; padding:10px; width:100% ">
+                    <p class = "content_img_small_card_up"> {{post.category.name}} </p>
                     <h4> <a href= " {% url 'post' post.id %}">{{post.title}}</a></h4>
                     <em> {{post.date|date:"d-m-Y"}}</em>
                 </td>

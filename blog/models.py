@@ -5,6 +5,7 @@ from django.db.models.constraints import UniqueConstraint
 from accounts.models import Account
 import datetime
 from django.template.defaultfilters import slugify
+# from unidecode import unidecode
 from django.urls import reverse
 
 
@@ -13,15 +14,15 @@ class Category(models.Model):
     slug = models.SlugField(unique=True,blank=True,null=True)
     
     def save(self, *args, **kwargs):
-         if not self.id:
+        if not self.id:
                 # Newly created object, so set slug
             self.slug = slugify(self.name)
-            super(Category, self).save(*args, **kwargs)
+        super(Category, self).save(*args, **kwargs)
     # def __str__(self):
     #     str(self.name)
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    slug  = models.SlugField(null=True,blank=True, unique=True)
+    slug  = models.SlugField(max_length = 100,null=True,blank=True, unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField()
     author = models.CharField(max_length= 10)
@@ -33,10 +34,10 @@ class Post(models.Model):
         return slugify(self.title)
     
     def save(self, *args, **kwargs):
-         if not self.id:
-                # Newly created object, so set slug
+        if not self.id:
+            # Newly created object, so set slug
             self.slug = slugify(self.title)
-            super(Post, self).save(*args, **kwargs)
+        super(Post, self).save(*args, **kwargs)
     def get_url(self):
         return reverse('post', args=[self.category.slug, self.slug])        
 

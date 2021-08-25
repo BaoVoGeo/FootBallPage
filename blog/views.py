@@ -3,27 +3,40 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls.base import reverse
 from django.urls import reverse, reverse_lazy
-from .models import *
-from .cmtforms import CommentForm
+from django.template.defaultfilters import slugify
+
 from django.views.generic import ListView
 from django.http import HttpResponseRedirect
 from intern.models import ReviewRating
 from django.db.models import Count,Exists   
 from django.core.exceptions import ObjectDoesNotExist
 
+from .models import *
+from .cmtforms import CommentForm
+
 def show_blog(request):
     #show top views (posts)
+    for obj in Post.objects.filter(slug= None):
+        
+        print(obj)
+        obj.slug = slugify(obj.title)
+        obj.save()
+    
     posts_date_main = Post.objects.all().order_by('-date')[:5]
     posts_date = Post.objects.all().order_by('-date')[5:]
     hot_view = PostViewsCount.objects.values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
-    posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
     
-    if (hot_view.count() < 5 ):
-        for  i in range(1,hot_view.count()):
-            posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
-    else: 
-        for  i in range(1,5):
-            posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    if (hot_view.count() > 0):
+        posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+        if (hot_view.count() < 5 ):
+            
+            for  i in range(1,hot_view.count()):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+        else: 
+            for  i in range(1,5):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    else:
+        posts_hot_views = posts_date_main
         
     context = {'posts_hot_views':posts_hot_views,
                 'Posts_main': posts_date_main,
@@ -32,21 +45,231 @@ def show_blog(request):
     return render(request, 'blog/blog.html', context)
 
 def show_blog_laliga(request):
-    posts_date_main = Post.objects.all().order_by('-date')[:5]
-    posts_date = Post.objects.all().order_by('-date')[5:]
-    hot_view = PostViewsCount.objects.values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
-    posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+    id_blog =  Category.objects.get(name = "La Liga").id
+    post_filter_date = Post.objects.filter(category = id_blog)
+    posts_date_main =post_filter_date.order_by('-date')[:5]
+    posts_date = post_filter_date.order_by('-date')[5:]
     
-    if (hot_view.count() < 5 ):
-        for  i in range(1,hot_view.count()):
-            posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
-    else: 
-        for  i in range(1,5):
-            posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    hot_view = PostViewsCount.objects.filter(post__in = post_filter_date).values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
+    
+    if (hot_view.count() > 0):
+        posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+        if (hot_view.count() < 5 ):
+            
+            for  i in range(1,hot_view.count()):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+        else: 
+            for  i in range(1,5):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    else:
+        posts_hot_views = posts_date_main
         
     context = {'posts_hot_views':posts_hot_views,
                 'Posts_main': posts_date_main,
                 'Posts_date': posts_date,
+                'title_page': posts_date_main[0].category.name,
+                }
+    return render(request, 'blog/blog_laliga.html', context)
+
+def show_blog_serie_A(request):
+    id_blog =  Category.objects.get(name = "Serie A").id
+    post_filter_date = Post.objects.filter(category = id_blog)
+    posts_date_main =post_filter_date.order_by('-date')[:5]
+    posts_date = post_filter_date.order_by('-date')[5:]
+    hot_view = PostViewsCount.objects.filter(post__in = post_filter_date).values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
+    
+    
+    if (hot_view.count() > 0):
+        posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+        if (hot_view.count() < 5 ):
+            
+            for  i in range(1,hot_view.count()):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+        else: 
+            for  i in range(1,5):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    else:
+        posts_hot_views = posts_date_main
+        
+    context = {'posts_hot_views':posts_hot_views,
+                'Posts_main': posts_date_main,
+                'Posts_date': posts_date,
+                'title_page': posts_date_main[0].category.name,
+                }
+    return render(request, 'blog/blog_laliga.html', context)
+
+def show_blog_vietnam(request):
+    id_blog =  Category.objects.get(name = "Viet Nam").id
+    post_filter_date = Post.objects.filter(category = id_blog)
+    posts_date_main =post_filter_date.order_by('-date')[:5]
+    posts_date = post_filter_date.order_by('-date')[5:]
+    hot_view = PostViewsCount.objects.filter(post__in = post_filter_date).values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
+    
+    if (hot_view.count() > 0):
+        posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+        if (hot_view.count() < 5 ):
+            
+            for  i in range(1,hot_view.count()):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+        else: 
+            for  i in range(1,5):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    else:
+        posts_hot_views = posts_date_main
+    context = {'posts_hot_views':posts_hot_views,
+                'Posts_main': posts_date_main,
+                'Posts_date': posts_date,
+                'title_page': posts_date_main[0].category.name,
+                }
+    return render(request, 'blog/blog_laliga.html', context)
+
+def show_blog_premier_league(request):
+    id_blog =  Category.objects.get(name = "Premier league").id
+    post_filter_date = Post.objects.filter(category = id_blog)
+    posts_date_main =post_filter_date.order_by('-date')[:5]
+    posts_date = post_filter_date.order_by('-date')[5:]
+    hot_view = PostViewsCount.objects.filter(post__in = post_filter_date).values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
+    
+    if (hot_view.count() > 0):
+        posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+        if (hot_view.count() < 5 ):
+            
+            for  i in range(1,hot_view.count()):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+        else: 
+            for  i in range(1,5):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    else:
+        posts_hot_views = posts_date_main
+    context = {'posts_hot_views':posts_hot_views,
+                'Posts_main': posts_date_main,
+                'Posts_date': posts_date,
+                'title_page': posts_date_main[0].category.name,
+                }
+    return render(request, 'blog/blog_laliga.html', context)
+
+def show_blog_ligue_1(request):
+    id_blog =  Category.objects.get(name = "Ligue 1").id
+    
+    post_filter_date = Post.objects.filter(category = id_blog)
+    posts_date_main =post_filter_date.order_by('-date')[:5]
+    posts_date = post_filter_date.order_by('-date')[5:]
+    hot_view = PostViewsCount.objects.filter(post__in = post_filter_date).values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
+    
+    if (hot_view.count() > 0):
+        posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+        if (hot_view.count() < 5 ):
+            
+            for  i in range(1,hot_view.count()):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+        else: 
+            for  i in range(1,5):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    else:
+        posts_hot_views = posts_date_main
+    
+    
+    context = {'posts_hot_views':posts_hot_views,
+                'Posts_main': posts_date_main,
+                'Posts_date': posts_date,
+                'title_page': posts_date_main[0].category.name,
+                }
+    return render(request, 'blog/blog_laliga.html', context)
+
+def show_blog_bundesliga(request):
+    id_blog =  Category.objects.get(name = "Bundesliga").id
+    post_filter_date = Post.objects.filter(category = id_blog)
+    posts_date_main =post_filter_date.order_by('-date')[:5]
+    posts_date = post_filter_date.order_by('-date')[5:]
+    hot_view = PostViewsCount.objects.filter(post__in = post_filter_date).values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
+    if (hot_view.count() > 0):
+        posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+        if (hot_view.count() < 5 ):
+            
+            for  i in range(1,hot_view.count()):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+        else: 
+            for  i in range(1,5):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    else:
+        posts_hot_views = posts_date_main
+    context = {'posts_hot_views':posts_hot_views,
+                'Posts_main': posts_date_main,
+                'Posts_date': posts_date,
+                'title_page': posts_date_main[0].category.name,
+                }
+    return render(request, 'blog/blog_laliga.html', context)
+
+def show_blog_transform(request):
+    id_blog =  Category.objects.get(name = "Transform").id
+    post_filter_date = Post.objects.filter(category = id_blog)
+    posts_date_main =post_filter_date.order_by('-date')[:5]
+    posts_date = post_filter_date.order_by('-date')[5:]
+    hot_view = PostViewsCount.objects.filter(post__in = post_filter_date).values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
+    if (hot_view.count() > 0):
+        posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+        if (hot_view.count() < 5 ):
+            
+            for  i in range(1,hot_view.count()):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+        else: 
+            for  i in range(1,5):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    else:
+        posts_hot_views = posts_date_main
+    context = {'posts_hot_views':posts_hot_views,
+                'Posts_main': posts_date_main,
+                'Posts_date': posts_date,
+                'title_page': posts_date_main[0].category.name,
+                }
+    return render(request, 'blog/blog_laliga.html', context)
+
+def show_blog_video(request):
+    id_blog =  Category.objects.get(name = "Video").id
+    post_filter_date = Post.objects.filter(category = id_blog)
+    posts_date_main =post_filter_date.order_by('-date')[:5]
+    posts_date = post_filter_date.order_by('-date')[5:]
+    hot_view = PostViewsCount.objects.filter(post__in = post_filter_date).values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
+    if (hot_view.count() > 0):
+        posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+        if (hot_view.count() < 5 ):
+            
+            for  i in range(1,hot_view.count()):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+        else: 
+            for  i in range(1,5):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    else:
+        posts_hot_views = posts_date_main
+    context = {'posts_hot_views':posts_hot_views,
+                'Posts_main': posts_date_main,
+                'Posts_date': posts_date,
+                'title_page': posts_date_main[0].category.name,
+                }
+    return render(request, 'blog/blog_laliga.html', context)
+
+def show_blog_football(request):
+    id_blog =  Category.objects.get(name = "Football").id
+    post_filter_date = Post.objects.filter(category = id_blog)
+    posts_date_main =post_filter_date.order_by('-date')[:5]
+    posts_date = post_filter_date.order_by('-date')[5:]
+    hot_view = PostViewsCount.objects.filter(post__in = post_filter_date).values('post_id').annotate(dcount = Count('post_id')).order_by('-dcount')[:5]
+    
+    if (hot_view.count() > 0):
+        posts_hot_views = Post.objects.filter(id = hot_view[0]["post_id"])
+        if (hot_view.count() < 5 ):
+            
+            for  i in range(1,hot_view.count()):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+        else: 
+            for  i in range(1,5):
+                posts_hot_views = posts_hot_views.union(Post.objects.filter(id = hot_view[i]["post_id"]))
+    else:
+        posts_hot_views = posts_date_main
+    context = {'posts_hot_views':posts_hot_views,
+                'Posts_main': posts_date_main,
+                'Posts_date': posts_date,
+                'title_page': posts_date_main[0].category.name,
                 }
     return render(request, 'blog/blog_laliga.html', context)
 

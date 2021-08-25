@@ -2,6 +2,7 @@
 {% block extrastyle%}
 
     
+    <link rel="stylesheet" href="/static/css/style_blog.css" type="text/css">
     <link rel="stylesheet" href="/static/css/style_main_page.css" type="text/css">
 
 {% endblock%}
@@ -11,6 +12,7 @@
 {% block content %}
     
 <div class="row">
+    <!-- -date -->
     <div class ="col-sm-8 ">
         {% for post in Posts_main %}
         <table  class ="tab_main">
@@ -43,6 +45,7 @@
         </table>
         {% endfor %}
     </div>
+    <!-- view -->
      <div class="col-sm-4">
         <aside class="blog-sidebar">
                 <div class="p-4 mb-3 bg-light rounded">
@@ -67,27 +70,30 @@
     </div>  
     
 </div>
-
+<hr>
 <div class="row">
-    <div class="col-sm-8">
-        {% for post in Posts_date %}
-            <table  class ="tab_list">
-            <hr>
-            <tr>
-                <td >
-                    <img src="{{post.image.url}}" width="150px" height=auto />
-                </td>
-                <td  class ="td_text_list" style=" border:none; padding:10px; width:100% ">
-                    <h4> <a href= " {% url 'post' post.id %}">{{post.title}}</a></h4>
-                    <em> {{post.date|date:"d-m-Y"}}</em>
-                </td>
-            </tr>
-        
-            
-            </table>
-        {% endfor %}
-    </div>
     
+    {% for post in Posts_date %}
+        <div class = "col-sm-6">
+            <div class = "row ff-more-card">
+                <div class = " col d-flex">
+                    <!-- <a href= " {% url 'post' post.id %}"> -->
+
+                    <div class = " ratio ratio-4x3 img_small_card">
+                        <img src="{{post.image.url}}" />  
+
+                    </div>
+                    <div class = " ff-ml-16 content_img_small_card">
+                        <p class = "content_img_small_card_up"> {{post.category.name}} </p> 
+
+                        <p class = "content_img_small_card_down"> {{post.title}}</p> 
+                        <em> {{post.date|date:"d-m-Y"}}</em>
+                    </div>
+                    <!-- </a> -->
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 
 </div>
 
