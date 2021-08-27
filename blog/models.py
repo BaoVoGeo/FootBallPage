@@ -1,50 +1,46 @@
 from django.db import models
+from django.db.models import Count
 from django.conf import settings
 from django.db.models.constraints import UniqueConstraint
 from accounts.models import Account
 import datetime
 from django.template.defaultfilters import slugify
+# from unidecode import unidecode
 from django.urls import reverse
+
 
 class Category(models.Model):
     name = models.CharField(max_length = 50)
     slug = models.SlugField(unique=True,blank=True,null=True)
     
     def save(self, *args, **kwargs):
-         if not self.id:
+        if not self.id:
                 # Newly created object, so set slug
             self.slug = slugify(self.name)
-            super(Category, self).save(*args, **kwargs)
+        super(Category, self).save(*args, **kwargs)
+    # def __str__(self):
+    #     str(self.name)
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    slug  = models.SlugField(null=True,blank=True, unique=True)
+    slug  = models.SlugField(max_length = 100,null=True,blank=True, unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField()
     author = models.CharField(max_length= 10)
     image = models.ImageField(null=True)
     date = models.DateTimeField(auto_now_add=True)
-    post_views=models.IntegerField(default=0)
+    post_views=models.IntegerField(default = 0)
     
     def title_slug  (self):
         return slugify(self.title)
     
     def save(self, *args, **kwargs):
-         if not self.id:
-                # Newly created object, so set slug
+        if not self.id:
+            # Newly created object, so set slug
             self.slug = slugify(self.title)
-            super(Post, self).save(*args, **kwargs)
+        super(Post, self).save(*args, **kwargs)
     def get_url(self):
         return reverse('post', args=[self.category.slug, self.slug])        
 
-class PostInteract(models.Model):
-    post_id = models.ForeignKey(Post,on_delete=models.CASCADE)
-    likes = models.IntegerField(default = 0)
-    dislikes = models.IntegerField(default = 0)
-    shares  = models.IntegerField(default = 0)
-    views=models.IntegerField(default=0)
-    def __str__(self):
-        
-        return self.post_id
 
 class PostViewsCount(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE,db_index=False)
@@ -54,7 +50,17 @@ class PostViewsCount(models.Model):
     
     class Meta:
         unique_together = (['post','ip','date_view'],['post','user','date_view'])
+
+class PostInteract(models.Model):
+    post = models.ForeignKey(Post,on_delete=models.CASCADE,db_index=False)
+    # likes = models.IntegerField(default = 0)
+    # dislikes = models.IntegerField(default = 0)
+    # shares  = models.IntegerField(default = 0)
+    views= models.IntegerField( default= 0)
     
+    def __str__(self):  
+        
+        return str(self.post)
     
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
@@ -67,7 +73,21 @@ class Comment(models.Model):
     def __str__(self):
         return 'Comment {} by {}'.format(self.body, self.author)
 
+class PostInteract_detail(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user_likes =  models.ManyToManyField(Account, related_name='requirement_post_likes')
+    user_dislikes =  models.ManyToManyField(Account, related_name='requirement_post_dislikes')
+    user_shares =  models.ManyToManyField(Account, related_name='requirement_post_shares')
     
+    def total_likes(self):
+        self.user_likes.count()
+    def total_dislikes(self):
+        self.user_dislikes.count()
+    def total_shares(self):
+        self.user_shares.count()
+    def __str__(self):
+        str(self.post)
+        
 class Like(models.Model):
     ''' like  comment '''
 

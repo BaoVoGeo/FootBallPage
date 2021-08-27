@@ -2,6 +2,7 @@
 {% block extrastyle %}
 
     <link rel="stylesheet" href="/static/css/style_post.css" type="text/css">
+    <script type="text/javascript" src="/static/js/js_post.js"></script>
     <meta property="og:url"             content="https://127.0.0.1:8000/blog/{{post.id}}" />
     <meta property="og:type"          content="website" />
     <meta property="og:title"         content= {{post.title}} />
@@ -25,22 +26,44 @@
         </script>
 
     <h3 > {{post.title}}</h3>
+    
     <center> <img src="{{post.image.url}}" width="px" height="300px" /> </center>
+
+    <em>Thích: {{total_likes}} &nbsp; Không thích: {{total_dislikes}}  </em>
+    <em>Lượt chia sẻ: {{total_shares}} &nbsp; Lượt xem: {{total_views}}  </em>
     <h6>on {{post.date}}</h6>
     </br>
     </br>
     {{post.content|safe|linebreaks}}
     
+    
+    
 
-    <div class="my-3 fb-share-button" 
-        data-href="https://127.0.0.1:8000/blog/{{post.id}}" 
-        data-layout="button_count" 
-        data-size="large">
-        <a target="_blank" 
-            href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8000%2Fblog%2Fblogpost%2F4&src=sdkpreparse" 
-            class="fb-xfbml-parse-ignore">Share
-        </a>
-    </div>
+    <form  action="{% url 'like_post' post.pk %}" method="POST" class ="interact">
+        {%csrf_token %}
+        <button class="like" type = "submit">
+        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+        </button>
+    </form>
+    
+    <form  action="{% url 'dislike_post' post.pk %}" method="POST" class ="interact">
+        {%csrf_token %}
+        <button class="dislike" type ="submit">
+            <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+        </button>
+    </form>
+    
+    <form action="{% url 'share_post' post.pk %}" method ="POST" class= "interact">
+        <button type = "submit" class = "my-3 fb-share-button" style ="border:none"
+            data-href="https://127.0.0.1:8000/blog/{{post.id}}" 
+            data-layout="button" 
+            data-size="large">
+            <a target="_blank" 
+                href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
+                class="fb-xfbml-parse-ignore">Share
+            </a>
+        </button>
+    </form>
 
     
     </br>
@@ -49,16 +72,17 @@
     {% for comment in post.comments.all %}
 
         <strong class="font-weight-bold" style = "color:rgb(68, 66, 230)">{{comment.author.first_name}} {{comment.author.last_name}}</strong> <br>
-        <em class=" text-muted font-weight-normal">{{comment.date}}</em>
+        <em style = "font-size:12px;">{{comment.date}}</em>
         <p>{{comment.body|linebreaks}}</p>
+
+        <!-- <a onclick="click_line_cmt(comment)"> Thích</a> -->
     {% endfor %}
         
     <div class ="row">
-        <div class="col-sm-8">
+        <div class="col-sm-12">
             {% if user.first_name %}
-                <form action="{% url 'post' post.id %}" method="POST" class ="form-com">
+                <form action="{% url 'post' post.id %}" method="POST" class ="form-com" >
                     {% csrf_token %}
-                    <p><label>Bình luận</label></p>
                     {{form.body}}
                     
                     <br/>

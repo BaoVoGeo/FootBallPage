@@ -1,6 +1,6 @@
 # FootBallPage
 GeoComply
-<<<<<<< HEAD
+
 
 README.md 
 
@@ -15,8 +15,16 @@ Setup env Django
 	pip install django-environ
 
 
-Set up MySQL
+Set up MySQL to enviroment ( Windows)
+- Search google
+
 Connect MySQL to Django
+
+- pip install mysqlclient
+- CREATE DATABASE 'name_db'
+- Update information DATABASE field in 'settings.py'
+- python manage.py makemigrations
+- python manage.py migrate
 Login = Facebook: 
 - Your own Facebook account.
 - use social-auth-app-django
@@ -54,5 +62,4 @@ Django-alert :
 	pip install django-alert
 
 	
-=======
->>>>>>> HRE_65639556_share_and_extensions_fb
+
