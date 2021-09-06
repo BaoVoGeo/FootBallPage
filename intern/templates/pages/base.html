@@ -56,14 +56,14 @@
             </div>
         </div>
         <!-- Search -->
-        <div class="row " style="margin-top: -10px;">
+        <div class="row " style="margin-top: -10px; margin-bottom:10px; margin-top: 20px">
             <div class="col-sm-5">
 
             </div>
             <div class="col-sm-8" style="margin-top: -10px; margin-bottom: -30px;">
                 
                 <div>
-                    <form action="{% url 'search' %}" class="search" method="GET" style="background-color: #fff;padding:0px; border: none">
+                    <form action="{% url 'search' %}" class="search" method="GET" style="background-color: #f6f6f6;padding:0px; border: none;">
                         <div class="input-group w-100">
                             <input type="text" class="form-control" placeholder="Tìm kiếm" name="q" value="{{ q }}">
                             <div >
@@ -72,7 +72,8 @@
                                 </button>
                             </div>
                         </div>
-                    </form> <!-- search-form// -->
+                    </form> 
+                    <!-- search-form/ -->
                 </div>
                 
             </div>
@@ -168,10 +169,8 @@
     </div>
     <hr>
 <footer>
-
     <section class="contact-section">
     
-
     <div class="row">
         <div class="col-sm-6">
             <header class="section-heading">
@@ -202,6 +201,7 @@
                 </article>
                 {% endfor %}
         </div>
+
         <div class="col-sm-6" style="padding:20px">
                 <form action="{% url 'submit_review' %}" method="POST">
                     {% csrf_token %}
@@ -224,9 +224,9 @@
 
                         <label for="subject">Chọn chủ đề</label>
                         <select name="subject" id="subject" class="form-control">
-                            <option value="volvo">Giao diện</option>
-                            <option value="saab">Tính năng</option>
-                            <option value="opel">Thông tin</option>
+                            <option value="Giao diện">Giao diện</option>
+                            <option value="Tính năng">Tính năng</option>
+                            <option value="Thông tin">Thông tin</option>
                         </select>
                         <br>
                         
@@ -235,7 +235,7 @@
                         
                         {% if user.is_authenticated %}
                             
-                            <input type="submit" value="Submit Review" class="btn btn-primary">
+                            <input type="submit" value="Gửi nhận xét" class="btn btn-primary">
     
                         {% else %}
                         <p>Bạn cần đăng nhập để nhận xét. <span><a href="{% url 'accounts' %}">Đăng nhập ngay</a></span></p>

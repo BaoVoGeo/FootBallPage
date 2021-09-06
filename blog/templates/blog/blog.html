@@ -23,6 +23,7 @@
                     <img src="{{post.image.url}}" width="400px" height=auto />
                 </td>
                 <td style="background-color:#c5c0c0; box-shadow: 0px 0px 1px 0px; border:none; padding:10px;">
+                    <p class = "content_img_small_card_up"> {{post.category.name}} </p> 
                     <h4> <a href= " {% url 'post' post.id %}">{{post.title}}</a></h4>
                     <p> {{post.date|date:"d-m-Y"}}</p>
                 </td>
@@ -35,7 +36,7 @@
                         sort_Col();
                         function sort_Col(){
                                 tr.insertCell(0);
-                                tr.cells[0].innerHTML += " <td style='padding: 5px;'> <h6> <a href= \"{% url 'post' post.id %}\"> {{post.title}}</a></h6>  <em>{{post.date|date:"d-m-Y"}} </em> </td>";
+                                tr.cells[0].innerHTML += " <td style='padding: 5px;'> <p class=\"content_img_small_card_up\"> {{post.category.name}} </p> <h6> <a href=\"{% url 'post' post.id %}\"> {{post.title}}</a></h6>  <em>{{post.date|date:'d-m-Y'}} </em> </td>";
                         }
             </script>
             <tr id ="tr_main"></tr>
@@ -77,19 +78,23 @@
         <div class = "col-sm-6">
             <div class = "row ff-more-card">
                 <div class = " col d-flex">
-                    <!-- <a href= " {% url 'post' post.id %}"> -->
+                    
 
                     <div class = " ratio ratio-4x3 img_small_card">
-                        <img src="{{post.image.url}}" />  
+                        
+                            <img src="{{post.image.url}}" />  
+                        
 
                     </div>
                     <div class = " ff-ml-16 content_img_small_card">
-                        <p class = "content_img_small_card_up"> {{post.category.name}} </p> 
+                        <a href= " {% url 'post' post.id %}">
+                            <p class = "content_img_small_card_up"> {{post.category.name}} </p> 
 
-                        <p class = "content_img_small_card_down"> {{post.title}}</p> 
-                        <em> {{post.date|date:"d-m-Y"}}</em>
+                            <p class = "content_img_small_card_down"> {{post.title}}</p> 
+                            <em> {{post.date|date:"d-m-Y"}}</em>
+                        </a>
                     </div>
-                    <!-- </a> -->
+                    
                 </div>
             </div>
         </div>

@@ -3,6 +3,7 @@
 
     <link rel="stylesheet" href="/static/css/style_post.css" type="text/css">
     <script type="text/javascript" src="/static/js/js_post.js"></script>
+
     <meta property="og:url"             content="https://127.0.0.1:8000/blog/{{post.id}}" />
     <meta property="og:type"          content="website" />
     <meta property="og:title"         content= {{post.title}} />
@@ -37,24 +38,22 @@
     {{post.content|safe|linebreaks}}
     
     
-    
-
-    <form  action="{% url 'like_post' post.pk %}" method="POST" class ="interact">
+    <form  action="{% url 'like_post' post.pk %}" method="POST" class="interact">
         {%csrf_token %}
-        <button class="like" type = "submit">
+        <button class="like" type="submit">
         <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
         </button>
     </form>
     
-    <form  action="{% url 'dislike_post' post.pk %}" method="POST" class ="interact">
+    <form  action="{% url 'dislike_post' post.pk %}" method="POST" class="interact">
         {%csrf_token %}
         <button class="dislike" type ="submit">
             <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
         </button>
     </form>
     
-    <form action="{% url 'share_post' post.pk %}" method ="POST" class= "interact">
-        <button type = "submit" class = "my-3 fb-share-button" style ="border:none"
+    <form action="{% url 'share_post' post.pk %}" method ="POST" class="interact">
+        <button type="submit" class="my-3 fb-share-button" style="border:none"
             data-href="https://127.0.0.1:8000/blog/{{post.id}}" 
             data-layout="button" 
             data-size="large">
@@ -64,6 +63,50 @@
             </a>
         </button>
     </form>
+
+    <form action="{% url 'rate_post' post.pk %}" method="POST" class="form-review-post">
+        {% csrf_token %}
+        <div>
+            {% include "pages/alerts.html" %}
+            <p>Bạn có hài lòng về bài viết?</p>
+            <!-- rate -->
+            <div>
+                <input type="radio" name="rating" id="rating10" value="5" required /><label for="rating10" title="5"></label>
+                <input type="radio" name="rating" id="rating9" value="4.5" required /><label for="rating9" title="4.5" class="half"></label>
+                <input type="radio" name="rating" id="rating8" value="4" required /><label for="rating8" title="4"></label>
+                <input type="radio" name="rating" id="rating7" value="3.5" required /><label for="rating7" title="3.5" class="half"></label>
+                <input type="radio" name="rating" id="rating6" value="3" required /><label for="rating6" title="3"></label>
+                <input type="radio" name="rating" id="rating5" value="2.5" required /><label for="rating5" title="2.5" class="half"></label>
+                <input type="radio" name="rating" id="rating4" value="2" required /><label for="rating4" title="2"></label>
+                <input type="radio" name="rating" id="rating3" value="1.5" required /><label for="rating3" title="1.5" class="half"></label>
+                <input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="1"></label>
+                <input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half"></label>
+            </div>
+
+            <div class="div_content_review">
+
+                <p for="subject">Chọn chủ đề</p>
+                <select name="subject" id="subject">
+                    <option value="Giao diện">Giao diện</option>
+                    <option value="Tính năng">Tính năng</option>
+                    <option value="Thông tin">Thông tin</option>
+                </select>
+                <br>
+                <textarea name="review" rows="4" cols="10" class="form-control" placeholder="Gửi lời yêu thương ở đây..."></textarea>
+                
+                {% if user.is_authenticated %}
+                    
+                    <input type="submit" value="Gửi nhận xét" class="btn btn-primary">
+
+                {% else %}
+                    <em style ="color:rgb(241, 15, 15)">Bạn cần đăng nhập để nhận xét. </em> 
+                    <!-- <span><a href="{% url 'accounts' %}">Đăng nhập ngay</a></span></p> -->
+                {% endif %}
+
+            </div>
+        </div>
+    </form>
+    <br>
 
     
     </br>
