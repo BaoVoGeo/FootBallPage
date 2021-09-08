@@ -39,7 +39,9 @@
                                 tr.cells[0].innerHTML += " <td style='padding: 5px;'> <p class=\"content_img_small_card_up\"> {{post.category.name}} </p> <h6> <a href=\"{% url 'post' post.id %}\"> {{post.title}}</a></h6>  <em>{{post.date|date:'d-m-Y'}} </em> </td>";
                         }
             </script>
-            <tr id ="tr_main"></tr>
+            <tr id ="tr_main"> 
+                <td style="display:none">This is main blog</td>
+            </tr>
             
             {% endif%}
             

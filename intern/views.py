@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 
-from blog.models import Post
+from blog.models import Post, PostInteract
 from .forms import UploadFileForm, ReviewForm
 from intern.models import ReviewRating
 
@@ -89,74 +89,103 @@ class ReviewListView(ListView):
     template_name = 'pages/base.html'
     context_object_name = 'Reviews'
     paginate_by = 5
-
-# def search(request):
-    
-#     if 'q' in request.GET:
-#         q = request.GET.get('q')
-#         posts = Post.objects.order_by('-post_views','-date').filter(Q(title__icontains=q) | Q(content__icontains=q))
-#         post_count = posts.count()
-#         print(q)
-#     paginator = Paginator(Post.objects.all(), 5)  
-#     try:
-#         page = int(request.GET.get('page', '1'))
-#     except:
-#         page = 1
-    
-#     try:
-#         record_list = paginator.page(page)
-#     except PageNotAnInteger:
-#         record_list = paginator.page(1)
-#     except EmptyPage:
-#         record_list = paginator.page(1)
-    
-#     print(paginator.page(2).object_list)
-#     index = record_list.number - 1
-#     # This value is maximum index of pages, so the last page - 1
-#     max_index = len(paginator.page_range)
-
-#     # range of 7, calculate where to slice the list
-#     start_index = index - 3 if index >= 3 else 0
-#     end_index = index + 4 if index <= max_index - 4 else max_index
-
-#     # new page range
-#     page_range = paginator.page_range[start_index:end_index]
-
-
-#     # showing first and last links in pagination
-#     if index >= 4:
-#         start_index = 1
-#     if end_index - index >= 4 and end_index != max_index:
-#         end_index = max_index
-#     else:
-#         end_index = None
-            
-#     context = {
-#         # 'Posts': posts,
-#         # 'q': q,
-#         # 'Post_count': post_count,
-#         'record_list': record_list,
-#         'page_range': page_range,
-#         'start_index': start_index,
-#         'end_index': end_index,
-#         'max_index':max_index,
-#     }   
-#     return render(request, 'pages/search_posts.html', context=context)
-
-
-class EmployeeList(ListView):
+class SearchList(ListView):
 
     def get(self,request,*args,**kwargs):
         """
         Return the list of all the active employee data.
         """
-        search_filter = request.GET.get('q')
-
+        search_filter = self.request.GET.get('q')
+        click = self.request.GET.get('click')
+        sort_value = '-date'
+        print("SearchList")
+        print(click)
+        print(search_filter)
         if not search_filter:
             queryset = Post.objects.all()
         else:
-            queryset = Post.objects.order_by('-post_views','-date').filter(Q(title__icontains=search_filter) | Q(content__icontains=search_filter))
-            
+            queryset = Post.objects.filter(Q(title__icontains=search_filter) | Q(content__icontains=search_filter)).order_by(sort_value)
+        post_count = queryset.count()
+        paginator = Paginator(queryset, 5)
+        try:
+            page = int(self.request.GET.get('page', '1'))
+        except:
+            page = 1
+        
+        try:
+            record_list = paginator.page(page)
+        except PageNotAnInteger:
+            record_list = paginator.page(1)
+        except EmptyPage:
+            record_list = paginator.page(paginator.num_pages)
+        
+        print("page nè" + str(page))
+        print(queryset)
+        print(record_list.object_list)
+        # Get the index of the current page
+        index = record_list.number - 1
+
+        # This value is maximum index of pages, so the last page - 1
+        max_index = len(paginator.page_range)
+
+        # range of 7, calculate where to slice the list
+        start_index = index - 3 if index >= 3 else 0
+        end_index = index + 4 if index <= max_index - 4 else max_index
+
+        # new page range
+        page_range = paginator.page_range[start_index:end_index]
+
+        # showing first and last links in pagination
+        if index >= 4:
+            start_index = 1
+        if end_index - index >= 4 and end_index != max_index:
+            end_index = max_index
+        else:
+            end_index = None
+
+        context = {
+        'Post_count': post_count,
+        'record_list': record_list,
+        'page_range': page_range,
+        'start_index': start_index,
+        'end_index': end_index,
+        'max_index':max_index,
+        }   
+        return render(request, 'pages/search_posts.html', context=context)
+
+class FilterList(ListView):
+    
+    def get(self,request,*args,**kwargs):
+        """
+        Return the list of all the active employee data.
+        """
+        search_filter = self.request.GET.get('q')
+        click = self.request.GET.get('click')
+        sort_value = '-date'
+        print("FilterList")
+        print(click)
+        print(search_filter)
+        if click=='1':
+            sort_value = self.request.GET.get('sorttitle')
+        if click=='2':
+            sort_value = self.request.GET.get('sortviews')
+        if click=='3':
+            sort_value = self.request.GET.get('sortdate')
+        
+        print(sort_value)
+        if click=='2':
+            if not search_filter:
+                queryset = Post.objects.all()
+            else:
+                queryset_view = Post.objects.filter(Q(title__icontains=search_filter) | Q(content__icontains=search_filter))
+                queryset = PostInteract.objects.filter(post_id__in = queryset_view).order_by(sort_value)
+        else: 
+            if not search_filter:
+                queryset = Post.objects.all()
+            else:
+                queryset = Post.objects.filter(Q(title__icontains=search_filter) | Q(content__icontains=search_filter)).order_by(sort_value)
+        
+        
         post_count = queryset.count()
         paginator = Paginator(queryset, 5)
         try:
@@ -192,7 +221,6 @@ class EmployeeList(ListView):
         else:
             end_index = None
 
-
         context = {
         'Post_count': post_count,
         'record_list': record_list,
@@ -201,4 +229,5 @@ class EmployeeList(ListView):
         'end_index': end_index,
         'max_index':max_index,
         }   
-        return render(request, 'pages/search_posts.html', context=context)
+        
+        return render(request, "pages/filter_search_results.html", context)
