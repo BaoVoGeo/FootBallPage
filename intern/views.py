@@ -177,8 +177,13 @@ class FilterList(ListView):
             if not search_filter:
                 queryset = Post.objects.all()
             else:
-                queryset_view = Post.objects.filter(Q(title__icontains=search_filter) | Q(content__icontains=search_filter))
-                queryset = PostInteract.objects.filter(post_id__in = queryset_view).order_by(sort_value)
+                queryset_filter = Post.objects.filter(Q(title__icontains=search_filter) | Q(content__icontains=search_filter))
+                queryset_interact = PostInteract.objects.filter(post_id__in = queryset_filter).order_by(sort_value)
+                queryset = Post.objects.filter(id=queryset_interact[0].post_id)
+                
+                for i in range(1,queryset_interact.count()):
+                    queryset = queryset.union(Post.objects.filter(id=queryset_interact[i].post_id))
+                
         else: 
             if not search_filter:
                 queryset = Post.objects.all()
@@ -186,6 +191,7 @@ class FilterList(ListView):
                 queryset = Post.objects.filter(Q(title__icontains=search_filter) | Q(content__icontains=search_filter)).order_by(sort_value)
         
         
+        print(queryset)
         post_count = queryset.count()
         paginator = Paginator(queryset, 5)
         try:
