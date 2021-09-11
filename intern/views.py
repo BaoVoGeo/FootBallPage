@@ -20,8 +20,6 @@ from intern.models import ReviewRating
 
 def index(request):
     return render(request, 'blog/blog.html')
-def contact(request):
-    return render(request, 'pages/contact.html')
 def showblog(request):
     return render(request, 'blog/blog.html')
 
@@ -53,12 +51,11 @@ def fileUploaderView(request):
     
     form = UploadFileForm()
     return render(request, 'pages/change_info.html', {'form':form})
-  
+
 def upload(f): 
     file = open(f.name, 'wb+') 
     for chunk in f.chunks():
         file.write(chunk)
-        
         
 def submit_review(request):
     url = request.META.get('HTTP_REFERER')
@@ -98,9 +95,6 @@ class SearchList(ListView):
         search_filter = self.request.GET.get('q')
         click = self.request.GET.get('click')
         sort_value = '-date'
-        print("SearchList")
-        print(click)
-        print(search_filter)
         if not search_filter:
             queryset = Post.objects.all()
         else:
@@ -118,10 +112,7 @@ class SearchList(ListView):
             record_list = paginator.page(1)
         except EmptyPage:
             record_list = paginator.page(paginator.num_pages)
-        
-        print("page nè" + str(page))
-        print(queryset)
-        print(record_list.object_list)
+    
         # Get the index of the current page
         index = record_list.number - 1
 
@@ -152,7 +143,6 @@ class SearchList(ListView):
         'max_index':max_index,
         }   
         return render(request, 'pages/search_posts.html', context=context)
-
 class FilterList(ListView):
     
     def get(self,request,*args,**kwargs):

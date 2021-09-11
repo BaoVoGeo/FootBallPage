@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'blog',
     'sslserver',
     'social_django',
-    'file_uploader'
+    'file_uploader',
+    'taggit',
 
 ]
 
