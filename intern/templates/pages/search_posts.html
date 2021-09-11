@@ -1,121 +1,136 @@
 {% extends "pages/base.html" %}
 {% block extrastyle %}
-
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="/static/css/style_search_posts.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/filter_search_results.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" crossorigin="anonymous">
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
-{% block title %}Tìm kiếm: {{q}}{% endblock %}
- 
+
+
+{% block title %}Tìm kiếm: {{request.GET.q}}{% endblock %}
+
 {% block content %}
 
 <div class="row">
     <div class="col-sm-8">
-        <!-- 
-        {% for post in Posts %}
-            <table  class ="tab_list">
-            <br>
-            <tr>
-                <td style=" padding:10px; width:100%; border:none ">
-                    <em> {{post.category.name}}</em>
-                    <h4> <a href= " {% url 'post' post.id %}">{{post.title}}</a></h4>
-                    <img src="{{post.image.url}}" width="50px" height=auto /> <em style="top:0px;"> {{post.date|date:"d-m-Y"}}</em>
-                    <hr>
-                </td>       
-            </tr>
-            </table>
-        {% endfor %} -->
-
         {% if request.GET.q %}
-            <h4>{{ request.GET.q }}</h4>
-        {% endif %}
-        <br>
-        <em> Tìm thấy {{Post_count}} kết quả</em>
-        <br>
-        {% if record_list %}
-            {% for post in record_list %}
-            <table  class ="tab_list">
-                <br>
-                <tr>
-                    <td style=" padding:10px; width:100%; border:none ">
-                        <em> {{post.category.name}}</em>
-                        <h4> <a href= " {% url 'post' post.id %}">{{post.title}}</a></h4>
-                        <img src="{{post.image.url}}" width="50px" height=auto /> <em style="top:0px;"> {{post.date|date:"d-m-Y"}}</em>
-                        <hr>
-                    </td>
-                    
-                </tr>
-            </table>
+            <div class="row">
                 
-            {% endfor %}
-        {% else %} 
-                <p>No Data Found</p>
-        {% endif %}
-    
-        
-        <!-- Pagination -->
-        {% if record_list.has_other_pages %}
-        
-            <div class="text-center" style="float:right">
-                <ul class="pagination">
-            
-                    {% if record_list.has_previous %}
-                        <li>
-                            <a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page=1">
-                                << </a> 
-                                <a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ record_list.previous_page_number }}">
-                                    < </a> 
-                        </li> 
-                    {% else %} 
-                        <li class="disabled"><span>
-                            << </span> </li> 
-                            <li class="disabled"><span>
-                                < </span> 
-                        </li> 
-                    {% endif %} 
-
-                    {% if start_index %} 
-                        <li>
-                            <a class="next" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ start_index }}">{{ start_index }}</a>
-                        </li>
-                        <li class="disabled"><span>&mldr;</span></li>
-                    {% endif %}
-            
-                    {% for i in page_range %}
-                        {% if record_list.number == i %}
-                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-                            {% else %}
-                            <li>
-                                <a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ i }}">{{ i }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if record_list.has_next %}
-                        {% if end_index %}
-                        <li class="disabled"><span>&mldr;</span></li>
-                        <li><a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ end_index }}">{{ end_index }}</a></li>
+                <div class="col-sm-6">
+                    <form method="get" class = "marketsearch"  style ="display:none">
+                        <div class="displayData-container container">
+                            <div class="clearfix">
+                                <div class="pull-right">
+                                    <input name="filter" value={{request.GET.q}}  type="hidden" autocomplete="off" class="form-control-sm fa fa-search   form-control"/>
+                                    <input name="sorttitle" id="sortbytitle"  type="hidden" value="-title"/>
+                                    <input name="sortviews" id="sortbyviews"  type="hidden" value="-views"/>
+                                    <input name="sortdate" id="sortbydate"  type="hidden" value="-date"/>
+                                    <input name="click" id="click"  type="hidden" value="0"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                     
-                        {% endif %}
-                            <li>
-                                <a class="next" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ record_list.next_page_number }}"> > </a>
-                                <a class="next" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{max_index}}"> >> </a>
-                    
-                            </li>
-                    {% else %}
-                        <li class="disabled"><span> > </span></li>
-                        <li class="disabled"><span> >> </span></li>
-                    {% endif %}
-            
-                </ul>
+                </div>
             </div>
             
+        {% else %}
+            <div class="col-sm-6">
+                <h4 style ="margin-top:10px">Vui lòng nhập nội dung tìm kiếm </h4>
+            </div>
+
         {% endif %}
-        <!--Pagination -->
+
+        <div id ="results">
+            <br>
+            <em> Tìm thấy {{Post_count}} kết quả</em>
+            <br>
+            
+            {% if record_list %}
+                {% for post in record_list %}
+                <table  class ="tab_list">
+                    <br>
+                    <tr>
+                        <td style=" padding:10px; width:100%; border:none ">
+                            <em> {{post.category.name}}</em>
+                            <h4> <a href= " {% url 'post' post.id %}">{{post.title}}</a></h4>
+                            <img src="{{post.image.url}}" width="50px" height=auto /> <em style="top:0px;"> {{post.date|date:"d-m-Y"}}</em>
+                            <hr>
+                        </td>
+                        
+                    </tr>
+                </table>  
+                {% endfor %}
+            {% else %} 
+                    <p>No Data Found</p>
+            {% endif %}
+        
+            <!-- Pagination -->
+            {% if record_list.has_other_pages %}
+                <div class="text-center" style="float:right">
+                    <ul class="pagination">
+                
+                        {% if record_list.has_previous %}
+                            <li>
+                                <a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page=1">
+                                    << &nbsp;</a>
+                                    <a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ record_list.previous_page_number }}">
+                                        &nbsp; < </a> 
+                            </li> 
+                        {% else %} 
+                            <li class="disabled"><span>
+                                << </span> </li> 
+                                <li class="disabled"><span>
+                                    < </span> 
+                            </li> 
+                        {% endif %} 
+
+                        {% if start_index %} 
+                            <li>
+                                <a class="next" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ start_index }}">{{ start_index }}&nbsp;</a>
+                            </li>
+                            <li class="disabled"><span>&mldr;</span></li>
+                        {% endif %}
+                
+                        {% for i in page_range %}
+                            {% if record_list.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                {% else %}
+                                <li>
+                                    <a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ i }}">{{ i }}&nbsp;</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if record_list.has_next %}
+                            {% if end_index %}
+                            <li class="disabled"><span>&mldr;</span></li>
+                            <li><a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ end_index }}">{{ end_index }}&nbsp;</a></li>
+                        
+                            {% endif %}
+                                <li>
+                                    <a class="next" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ record_list.next_page_number }}"> &nbsp;> </a>
+                                    <a class="next" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{max_index}}"> &nbsp;>> </a>
+                        
+                                </li>
+                        {% else %}
+                            <li class="disabled"><span> > </span></li>
+                            <li class="disabled"><span> >> </span></li>
+                        {% endif %}
+                
+                    </ul>
+                </div>
+
+            {% endif %}
+            <!--Pagination -->
+        </div>
+        
     </div>
-    
-
 </div>
-
-
-
 {% endblock %}

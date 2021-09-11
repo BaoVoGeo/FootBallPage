@@ -14,6 +14,6 @@ urlpatterns = [
     url('profile/change_info', views.fileUploaderView, name='fileUpLoaderView'),
     path('accounts/', include('accounts.urls'), name = 'accounts'),
     path('submit_review/', views.submit_review, name='submit_review'),
-    path('search/', views.EmployeeList.as_view(), name = 'search'),
-
+    path('search/', views.SearchList.as_view(), name = 'search'),
+    path('filter/', views.FilterList.as_view(), name = 'filter'),
 ]
