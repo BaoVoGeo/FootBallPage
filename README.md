@@ -49,11 +49,11 @@ http -> https:
 If have error "Table 'django.social_auth_usersocialauth' doesn't exist"
 
 After update in settings.py, please run command lines :
-	python manage.py makemigration
+	python manage.py makemigrations
 	python manage.py migrate
 
 The another day, You can have error :  
-No module "ssqserver", run command line:
+No module "sslserver", run command line:
 	pip install django-sslserver
 No module "social-auth", run command line: 
 	pip install python-social-auth[django]
@@ -61,5 +61,7 @@ No module "social-auth", run command line:
 Django-alert : 
 	pip install django-alert
 
+Django tagging: 
+	pip install django-taggit
 	
 

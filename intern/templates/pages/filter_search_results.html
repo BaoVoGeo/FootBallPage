@@ -71,9 +71,9 @@
             
                     {% if record_list.has_previous %}
                         <li>
-                            <a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page=1">
+                            <a class="previous" href="?page=1">
                                 << &nbsp;</a>
-                                <a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ record_list.previous_page_number }}">
+                                <a class="previous" href="?{page={{ record_list.previous_page_number }}">
                                     &nbsp; < </a> 
                         </li> 
                     {% else %} 
@@ -83,10 +83,10 @@
                                 < </span> 
                         </li> 
                     {% endif %} 
-
+                        
                     {% if start_index %} 
                         <li>
-                            <a class="next" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ start_index }}">{{ start_index }}&nbsp;</a>
+                            <a class="next" href="?page={{ start_index }}">{{ start_index }}&nbsp;</a>
                         </li>
                         <li class="disabled"><span>&mldr;</span></li>
                     {% endif %}
@@ -95,8 +95,8 @@
                         {% if record_list.number == i %}
                             <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
                             {% else %}
-                            <li>
-                                <a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ i }}">{{ i }}&nbsp;</a>
+                            <li class = "">
+                                <a class="previous" href="?page={{ i }}">{{ i }}&nbsp;</a>
                             </li>
                         {% endif %}
                     {% endfor %}
@@ -104,13 +104,12 @@
                     {% if record_list.has_next %}
                         {% if end_index %}
                         <li class="disabled"><span>&mldr;</span></li>
-                        <li><a class="previous" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ end_index }}">{{ end_index }}&nbsp;</a></li>
+                        <li><a class="previous" href="?page={{ end_index }}">{{ end_index }}&nbsp;</a></li>
                     
                         {% endif %}
                             <li>
-                                <a class="next" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{ record_list.next_page_number }}"> &nbsp;> </a>
-                                <a class="next" href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}&page={{max_index}}"> &nbsp;>> </a>
-                    
+                                <a class="next" href="?page={{ record_list.next_page_number }}"> &nbsp;> </a>
+                                <a class="next" href="?page={{max_index}}"> &nbsp;>> </a>
                             </li>
                     {% else %}
                         <li class="disabled"><span> > </span></li>

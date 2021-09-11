@@ -10,9 +10,11 @@ from django.urls import reverse
 
 
 class Category(models.Model):
-    name = models.CharField(max_length = 50)
+    name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True,blank=True,null=True)
-    
+    left = models.IntegerField(unique=True,blank=True,null=True)
+    right = models.IntegerField(unique=True,blank=True,null=True)
+    depth = models.IntegerField(blank=True,null=True)
     def save(self, *args, **kwargs):
         if not self.id:
                 # Newly created object, so set slug
@@ -22,13 +24,14 @@ class Category(models.Model):
     #     str(self.name)
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    slug  = models.SlugField(max_length = 100,null=True,blank=True, unique=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    slug  = models.SlugField(max_length=100,null=True,blank=True,unique=True)
+    category = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
     content = models.TextField()
-    author = models.CharField(max_length= 10)
+    author = models.CharField(max_length=10)
     image = models.ImageField(null=True)
     date = models.DateTimeField(auto_now_add=True)
     post_views=models.IntegerField(default = 0)
+    
     
     def title_slug  (self):
         return slugify(self.title)

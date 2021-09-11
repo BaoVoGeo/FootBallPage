@@ -11,7 +11,7 @@ $(function runFilter(){
     });
     $(".search").keyup(function(){
         
-		var url = '/filter'; // Backend url
+		var url = '/filter/'; // Backend url
 		var params = {'q':$("input[name=filter]").val(), 'sorttitle':$("input[name=sorttitle]").val(), 'sortviews':$("input[name=sortviews]").val(), 'sortdate':$("input[name=sortdate]").val(), 'click':$("input[name=click]").val()}; // Search field value
         fetchData(url, params); // Backend call for filtered data
 	});
@@ -83,9 +83,6 @@ function fetchData(url, params) {
                 }
                 var url = '/filter/';
                 var params = {'q':$("input[name=filter]").val(),'sorttitle':$("input[name=sorttitle]").val(),'sortviews':$("input[name=sortviews]").val(),'click':$("input[name=click]").val(), 'sortdate':$("input[name=sortdate]").val()};
-                console.log(sortbychartitle);
-                console.log("Chay vao title");
-                console.log($("#sortbytitle").val())
                 fetchData(url, params);
                 
             });
@@ -129,7 +126,15 @@ function fetchData(url, params) {
                 fetchData(url, params);
 
             });
-            
+            $(".previous, .next").click(function(elem){
+                // Prevent button from taking you away from current page
+                elem.preventDefault();
+                // Get the page's url from the button clicked
+                var url = '/filter' + $(this).attr('href');
+    
+                // Call this function again with url containing page parameter
+                fetchData(url, params);
+            });
                 
         }
     );
