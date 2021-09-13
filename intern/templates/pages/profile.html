@@ -1,6 +1,6 @@
 {% extends "pages/base.html" %}
 
-{% block title %} {{user.username}} {% endblock %}
+{% block title %} Lề Bóng Đá: {{user.first_name}} {{user.last_name}} {% endblock %}
 {% block content %}
    <center>
 
@@ -10,7 +10,6 @@
       {{user.username}}
    {% endif %}
    </p>
-   
    <a href ="/profile/change_info"> Đổi thông tin cá nhân </a>  <br>
    <a href="#"> Đổi mật khẩu </a>
    </center>

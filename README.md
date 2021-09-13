@@ -63,5 +63,8 @@ Django-alert :
 
 Django tagging: 
 	pip install django-taggit
+
+Upload file 
+	pip install Pillow
 	
 
