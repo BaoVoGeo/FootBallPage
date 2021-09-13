@@ -1,5 +1,5 @@
 
-$(function runFilter(){
+$(function(){
     // $('.alert').delay(3000).fadeOut();
     // $('#delete_success').delay(3000).fadeOut();
     $("input[name=filter]").on('keyup keypress', function(e) {
@@ -9,8 +9,9 @@ $(function runFilter(){
         return false;
         }
     });
+    
     $(".search").keyup(function(){
-        console.log("Sao vay ta")
+        
 		var url = '/filter/'; // Backend url
 		var params = {'q':$("input[name=filter]").val(), 'sorttitle':$("input[name=sorttitle]").val(), 'sortviews':$("input[name=sortviews]").val(), 'sortdate':$("input[name=sortdate]").val(), 'click':$("input[name=click]").val()}; // Search field value
         fetchData(url, params); // Backend call for filtered data
@@ -18,9 +19,9 @@ $(function runFilter(){
     // $(".search").keyup(); 
 });
 var Dem = 1;
+
 function fetchData(url, params) {
-    console.log("Lap lan thu ")
-    console.log(Dem)
+    
     Dem = Dem + 1;
     var sortbytitle = $("#sortbytitle").val();
     var sortbyviews = $("#sortbyviews").val();
