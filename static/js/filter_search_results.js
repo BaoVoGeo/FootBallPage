@@ -10,15 +10,12 @@ $(function runFilter(){
         }
     });
     $(".search").keyup(function(){
-        
+        console.log("Sao vay ta")
 		var url = '/filter/'; // Backend url
 		var params = {'q':$("input[name=filter]").val(), 'sorttitle':$("input[name=sorttitle]").val(), 'sortviews':$("input[name=sortviews]").val(), 'sortdate':$("input[name=sortdate]").val(), 'click':$("input[name=click]").val()}; // Search field value
         fetchData(url, params); // Backend call for filtered data
-	});
-    
-    $(".search").keyup();
-    
-    
+	}).trigger("keyup");
+    // $(".search").keyup(); 
 });
 var Dem = 1;
 function fetchData(url, params) {
@@ -139,43 +136,3 @@ function fetchData(url, params) {
         }
     );
 };
-// function showdelete(name,id)
-// {
-//     $('#autoid').val(id);
-//     $('#deleting_field').html(name);
-//     $('#myModal').modal('show');
-// }
-
-// function deleteemp()
-// {
-//     var deleteid= $('#autoid').val();
-//     url='/delete/'+deleteid;
-//     $.ajax({
-//             type: 'GET',
-//             url:url,
-//             dataType: 'json',
-
-//             success: function(data) {
-
-//             if(data.message ==0)
-//             {
-//                 alert('Something Went Wrong');
-//             }
-//             else
-//             {
-//                 $('#myModal').modal('hide');
-//                 $("#delete_success").show();
-//                 $('#delete_success').delay(3000).fadeOut();
-
-//                 $("input[name=filter]").keyup(function(){
-//                     var url = '/list';
-//                     var params = {'filter':$("input[name=filter]").val()};
-//                     fetchData(url, params);
-//                 }).trigger('keyup');
-//             }
-//             },
-//             error: function(data) { // if error occured
-//                 alert("Error occured.please try again");
-//             }
-//     });
-// }
