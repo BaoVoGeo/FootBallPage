@@ -5,7 +5,7 @@ from django.db.models.constraints import UniqueConstraint
 from accounts.models import Account
 import datetime
 from django.template.defaultfilters import slugify
-# from unidecode import unidecode
+from taggit.managers import TaggableManager
 from django.urls import reverse
 
 
@@ -31,7 +31,7 @@ class Post(models.Model):
     image = models.ImageField(null=True)
     date = models.DateTimeField(auto_now_add=True)
     post_views=models.IntegerField(default = 0)
-    
+    tags = TaggableManager()
     
     def title_slug  (self):
         return slugify(self.title)
@@ -114,7 +114,6 @@ class DisLike(models.Model):
     def __str__(self):
         return str(self.comment.comment)[:30]
     
-
 class Rating(models.Model):
     
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

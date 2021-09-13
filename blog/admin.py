@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-
-
 from .models import *
 
 
@@ -15,7 +13,7 @@ class CommentInline(admin.TabularInline):
     model = Comment
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title','author', 'date']
+    list_display = ['title','author', 'date','tags']
     list_filter = ['date']
     search_fields = ['title','author']
     inlines = [CommentInline]

@@ -25,10 +25,10 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db) 
         return user
 
+profile_default = 'images/avatar/messi.jpg'
 class Account(AbstractBaseUser): 
     first_name = models.CharField(max_length=50) 
     last_name = models.CharField(max_length=50) 
-    #username = models.CharField(max_length=50, unique=True , default ='LeFan') 
     email = models.EmailField(max_length=100, unique=True) 
     phone_number = models.CharField(max_length=50) # required 
     date_joined = models.DateTimeField(auto_now_add=True) 
@@ -37,11 +37,13 @@ class Account(AbstractBaseUser):
     is_staff = models.BooleanField(default=False) 
     is_active = models.BooleanField(default=False) 
     is_superadmin = models.BooleanField(default=False) 
-    # profile_avt = models.ImageField(max_length=255,upload_to = get_profile_image_filepath, null = True, blank = True, default = get_default_profile_image)
-    USERNAME_FIELD = 'email' # Trường quyêt định khi login 
+    profile_avt = models.ImageField(upload_to='images/avatar', null=True, blank=True, default="media/images/avatar.png")
+    
+    USERNAME_FIELD = 'email' # Trường quyết định khi login 
     REQUIRED_FIELDS = [  'first_name', 'last_name'] 
     # Các trường yêu cầu khi đk tài khoản (mặc định đã có email), mặc định có password 
     objects = MyAccountManager() 
+    
     def __str__(self): 
         return self.email 
     def has_perm(self, perm, obj=None): 
@@ -49,11 +51,16 @@ class Account(AbstractBaseUser):
     # # Admin có tất cả quyền trong hệ thống 
     def has_module_perms(self, add_label): 
         return True
+    
     @property
     def is_staff(self):
-        "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
         return self.is_admin
+    @property
+    def get_profile_avt_url(self):
+        if self.profile_avt:
+            return self.profile_avt.url
+        else:   
+            return "media/images/avatar.png"
     
     
 def get_profile_image_filepath (self,filename):
