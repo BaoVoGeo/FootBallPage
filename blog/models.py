@@ -5,14 +5,16 @@ from django.db.models.constraints import UniqueConstraint
 from accounts.models import Account
 import datetime
 from django.template.defaultfilters import slugify
-# from unidecode import unidecode
+from taggit.managers import TaggableManager
 from django.urls import reverse
 
 
 class Category(models.Model):
-    name = models.CharField(max_length = 50)
+    name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True,blank=True,null=True)
-    
+    left = models.IntegerField(unique=True,blank=True,null=True)
+    right = models.IntegerField(unique=True,blank=True,null=True)
+    depth = models.IntegerField(blank=True,null=True)
     def save(self, *args, **kwargs):
         if not self.id:
                 # Newly created object, so set slug
@@ -22,13 +24,14 @@ class Category(models.Model):
     #     str(self.name)
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    slug  = models.SlugField(max_length = 100,null=True,blank=True, unique=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    slug  = models.SlugField(max_length=100,null=True,blank=True,unique=True)
+    category = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
     content = models.TextField()
-    author = models.CharField(max_length= 10)
+    author = models.CharField(max_length=10)
     image = models.ImageField(null=True)
     date = models.DateTimeField(auto_now_add=True)
     post_views=models.IntegerField(default = 0)
+    tags = TaggableManager()
     
     def title_slug  (self):
         return slugify(self.title)
@@ -39,7 +42,8 @@ class Post(models.Model):
             self.slug = slugify(self.title)
         super(Post, self).save(*args, **kwargs)
     def get_url(self):
-        return reverse('post', args=[self.category.slug, self.slug])        
+        return reverse('post', args=[self.category.slug, self.slug])   
+         
 
 
 class PostViewsCount(models.Model):
@@ -109,4 +113,23 @@ class DisLike(models.Model):
 
     def __str__(self):
         return str(self.comment.comment)[:30]
+    
+class Rating(models.Model):
+    
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    users =  models.ManyToManyField(Account, related_name='requirement_post_rating')
+    subject = models.CharField(max_length=100, blank=True)
+    review = models.TextField(max_length=500, blank=True)
+    rating = models.FloatField()
+    ip = models.CharField(max_length=20, blank=True)
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    
+    
+    def total_rating(self):
+        self.users.count()
+    def __str__(self):
+        self.subject
+    
 

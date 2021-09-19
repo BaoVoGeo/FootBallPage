@@ -1,13 +1,9 @@
-
-
 #PostDetail h3{
   text-transform: uppercase;
   letter-spacing: 1px;
-
   padding-top: 30px;
   padding-bottom: 10px;
   text-align: center;
-  
   color: rgb(177, 32, 32);
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
@@ -17,7 +13,6 @@ button.like{
 	width: 30px;
 	height: 30px;
 	margin: 0 auto;
-	
 	border-radius: 50%;
 	color: rgba(0,150,136 ,1);
 	background-color:rgba(38,166,154 ,0.3);
@@ -29,7 +24,6 @@ button.dislike{
 	width: 30px;
 	height: 30px;
 	margin: 0 auto;
-	
 	border-radius: 50%;
 	color: rgba(255,82,82 ,1);
 	background-color: rgba(255,138,128 ,0.3);
@@ -51,11 +45,9 @@ button.dislike{
   padding: 0px;
   margin: 0px;
   text-align: left;
-  
   border: none;
   
 }
-
 
 .form-com input {
   
@@ -71,4 +63,53 @@ button.dislike{
   height : 50px;
   color: #0f0f0f;
   
+}
+
+.form-review-post{
+  margin:0;
+  background-color:#f6f6f6;
+  padding:15px;
+  padding-left:0;
+}
+.form-review-post input, textarea{
+  outline: none;
+  padding: 10px;
+  background-color: rgba(48, 47, 47, 0.3);
+  border: 1px solid rgba(70, 68, 68, 0.7);
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.form-review-post textarea{
+  resize: none;
+  height: 100px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.form-review-post input{
+  height: 25px;
+}
+
+.form-review-post input[type=text], input[type=email], textarea{
+  width: 80%;
+  font-size: 100%;
+  transition: all .3s;
+}
+
+.form-review-post input[type=text]:focus, input[type=email]:focus, textarea:focus{
+  color: white;
+  background-color: rgba(240, 234, 234, 0.8)
+}
+
+form .row:last-child{
+  text-align: center;
+}
+
+.form-review-post input[type=submit]{
+  height: 50px;
+  font-weight: 700;
+  font-size: 100%;
+  border-radius: 5px;
+  width: 60%;
 }

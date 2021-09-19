@@ -1,0 +1,124 @@
+
+{% if request.GET.q %}
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4 style ="margin-top:10px">Tìm kiếm: {{ request.GET.q }}</h4>
+                </div>
+
+                <div class="col-sm-6">
+                    <form method="get" class = "marketsearch"  style ="display:none">
+                        <div class="displayData-container container">
+                            <div class="clearfix">
+                                <div class="pull-right">
+                                    <input name="filter" value={{request.GET.q}}  type="hidden" autocomplete="off" class="form-control-sm fa fa-search search form-control"/>
+                                    <input name="sorttitle" id="sortbytitle"  type="hidden" value="title"/>
+                                    <input name="sortviews" id="sortbyviews"  type="hidden" value="views"/>
+                                    <input name="sortdate" id="sortbydate"  type="hidden" value="date"/>
+                                    <input name="click" id="click"  type="hidden" value="0"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <table class="table responsive datatable dataTable" id="sort" style="width:100%" >
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col" class="sorting title">Tiêu đề</th>
+                                <th scope="col" class="sorting views">Lượt xem</th>
+                                <th scope="col" class="sorting date">Ngày đăng</th>
+                                
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                
+
+            </div>
+            
+        {% endif %}
+        <br>
+        <em> Tìm thấy {{Post_count}} kết quả</em>
+        <br>
+        <div id ="results">
+
+        </div>
+        {% if record_list %}
+            {% for post in record_list %}
+            <table  class ="tab_list">
+                <br>
+                <tr>
+                    <td style=" padding:10px; width:100%; border:none ">
+                        <em> {{post.category.name}}</em>
+                        <h4> <a href= " {% url 'post' post.id %}">{{post.title}}</a></h4>
+                        <img src="{{post.image.url}}" width="50px" height=auto /> <em style="top:0px;"> {{post.date|date:"d-m-Y"}}</em>
+                        <hr>
+                    </td>
+                    
+                </tr>
+            </table>
+                
+            {% endfor %}
+        {% else %} 
+                <p>No Data Found</p>
+        {% endif %}
+    
+        
+        <!-- Pagination -->
+        {% if record_list.has_other_pages %}
+        
+            <div class="text-center" style="float:right">
+                <ul class="pagination">
+            
+                    {% if record_list.has_previous %}
+                        <li>
+                            <a class="previous" href="?page=1">
+                                << &nbsp;</a>
+                                <a class="previous" href="?{page={{ record_list.previous_page_number }}">
+                                    &nbsp; < </a> 
+                        </li> 
+                    {% else %} 
+                        <li class="disabled"><span>
+                            << </span> </li> 
+                            <li class="disabled"><span>
+                                < </span> 
+                        </li> 
+                    {% endif %} 
+                        
+                    {% if start_index %} 
+                        <li>
+                            <a class="next" href="?page={{ start_index }}">{{ start_index }}&nbsp;</a>
+                        </li>
+                        <li class="disabled"><span>&mldr;</span></li>
+                    {% endif %}
+            
+                    {% for i in page_range %}
+                        {% if record_list.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                            <li class = "">
+                                <a class="previous" href="?page={{ i }}">{{ i }}&nbsp;</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if record_list.has_next %}
+                        {% if end_index %}
+                        <li class="disabled"><span>&mldr;</span></li>
+                        <li><a class="previous" href="?page={{ end_index }}">{{ end_index }}&nbsp;</a></li>
+                    
+                        {% endif %}
+                            <li>
+                                <a class="next" href="?page={{ record_list.next_page_number }}"> &nbsp;> </a>
+                                <a class="next" href="?page={{max_index}}"> &nbsp;>> </a>
+                            </li>
+                    {% else %}
+                        <li class="disabled"><span> > </span></li>
+                        <li class="disabled"><span> >> </span></li>
+                    {% endif %}
+            
+                </ul>
+            </div>
+            
+        {% endif %}
+        
+        <!--Pagination -->

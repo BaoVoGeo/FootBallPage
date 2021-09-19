@@ -1,21 +1,19 @@
 from django.contrib import admin
 
-
-
 from .models import *
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name','slug']
-    list_filter = ['name']
-    search_fields = ['name','slug']
+    list_display = ['name','slug','left','right','depth']
+    list_filter = ['name','left','right']
+    search_fields = ['name','slug','left','right','depth']
     prepopulated_fields = {'slug': ('name',)}
     
 class CommentInline(admin.TabularInline):
     model = Comment
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title','author', 'date']
+    list_display = ['title','author', 'date','tags']
     list_filter = ['date']
     search_fields = ['title','author']
     inlines = [CommentInline]
